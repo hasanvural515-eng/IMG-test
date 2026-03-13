@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Web PNG Oyun Taslağı</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: #222; font-family: sans-serif; }
+        
+        /* OYUN ALANI (HARİTA) */
+        #game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('cimen.png'); /* ÇİMEN BURAYA */
+            background-repeat: repeat;
+        }
+
+        /* TARLA ARAZİSİ */
+        .tarla {
+            position: absolute;
+            top: 100px;
+            left: 200px;
+            width: 150px;
+            z-index: 1;
+        }
+
+        /* KARAKTER */
+        #player {
+            position: absolute;
+            width: 64px;
+            height: 64px;
+            z-index: 10;
+            transition: transform 0.1s;
+        }
+
+        /* JOYSTICK (KONTROL) */
+        #joystick-area {
+            position: fixed;
+            bottom: 50px;
+            left: 50px;
+            width: 120px;
+            height: 120px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: none;
+        }
+        #stick {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        /* ENVANTER VE ÇANTA TUŞU */
+        #bag-btn {
+            position: fixed;
+            bottom: 50px;
+            right: 50px;
+            padding: 15px 25px;
+            background: orange;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #inventory {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 200px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            border: 2px solid gold;
+            padding: 20px;
+            text-align: center;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <img src="tarla.png" alt="Tarla" class="tarla">
+
+    <img src="karakter.png" id="player" alt="Karakter">
+</div>
+
+<div id="joystick-area">
+    <div id="stick"></div>
+</div>
+
+<button id="bag-btn" onclick="toggleInventory()">🎒 ÇANTA</button>
+
+<div id="inventory">
+    <h3>Envanter</h3>
+    <hr>
+    <p>Boş (Tohum ekle...)</p>
+    <button onclick="toggleInventory()">Kapat</button>
+</div>
+
+<script>
+    const player = document.getElementById('player');
+    let posX = 100;
+    let posY = 100;
+    let speed = 5;
+
+    // ENVANTER AÇ/KAPAT
+    function toggleInventory() {
+        const inv = document.getElementById('inventory');
+        inv.style.display = (inv.style.display === 'block') ? 'none' : 'block';
+    }
+
+    // BASİT KLAVYE HAREKETİ (Test için)
+    window.addEventListener('keydown', (e) => {
+        if(e.key === "ArrowUp") posY -= speed;
+        if(e.key === "ArrowDown") posY += speed;
+        if(e.key === "ArrowLeft") { posX -= speed; player.style.transform = "scaleX(-1)"; }
+        if(e.key === "ArrowRight") { posX += speed; player.style.transform = "scaleX(1)"; }
+        
+        player.style.top = posY + "px";
+        player.style.left = posX + "px";
+    });
+
+    // NOT: Joystick için özel bir kütüphane (Nipple.js gibi) 
+    // veya uzun dokunmatik kodları gerekir, şu an klavye ile test edebilirsin.
+</script>
+
+</body>
+</html>
